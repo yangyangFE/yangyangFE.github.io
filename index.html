@@ -229,6 +229,134 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/10/PWA在实际项目中如何使用？/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lyon Yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lyon Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2018/08/10/PWA在实际项目中如何使用？/" itemprop="url">PWA在实际项目中如何使用？</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-10T09:57:37+08:00">
+                2018-08-10
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+          什么是 PWA
+Progressive Web App, 简称 PWA，是提升 Web App 的体验的一种新方法，能给用户原生应用的体验。
+PWA 能做到原生应用的体验不是靠特指某一项技术，而是经过应用一些新技术进行改进，在安全、性能和体验三个方面都有很大提升，PWA 本质上是 Web App，借
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/10/PWA在实际项目中如何使用？/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/09/使用pm2启动带命令行参数的nodejs服务/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -300,8 +428,15 @@
       
         
           
-            
           
+          
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/09/使用pm2启动带命令行参数的nodejs服务/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -419,17 +554,20 @@
       
         
           
-            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><hr>
-<p>aws免费ec2示例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。</p>
-<p>具体表现为，打包进度到达91%时就卡住了，等了进15分钟，不见好转。</p>
-<p>考虑在个人机器上没有遇到此问题，低配置机器上出现，可能是配置问题。</p>
-<hr>
-<h1 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Make all swap off</span><br><span class="line">sudo swapoff -a</span><br><span class="line">Resize the swapfile</span><br><span class="line">sudo dd <span class="keyword">if</span>=/dev/zero of=/swapfile bs=1M count=1024</span><br><span class="line">Make swapfile usable</span><br><span class="line">sudo mkswap /swapfile</span><br><span class="line">Make swapon again</span><br><span class="line">sudo swapon /swapfile</span><br></pre></td></tr></table></figure>
-<h1 id="关于swap文件"><a href="#关于swap文件" class="headerlink" title="关于swap文件"></a>关于swap文件</h1><p>当系统的物理内存不够用的时候，就需要将物理内存中的一部分空间释放出来，以供当前运行的程序使用。那些被释放的空间可能来自一些很长时间没有什么操作的程序，这些被释放的空间被临时保存到Swap空间中，等到那些程序要运行时，再从Swap中恢复保存的数据到内存中。这样，系统总是在物理内存不够时，才进行Swap交换。</p>
-<p>而由于我们的机器只有1G内存，所以打包时，内存被占满，原有的swap空间也已经被占满了，所以webpack从硬盘读出来的数据无法加载进内存中，也就无法为我们继续打包了。</p>
-<p>至于为什么被卡在91%，猜测是webpack不是一次把所有资源都从硬盘读进内存，而是边打包边寻找依赖，从硬盘读出。所以weboack实际上应该是不知道当前打包进度的，91%应该也只是个假的，类似于网站的顶部加载条。</p>
+          背景
+aws免费ec2示例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。
+具体表现为，打包进度到达91%时就卡住了，等了进15分钟，不见好转。
+考虑在个人机器上没有遇到此问题，低配置机器上出现，可能是配置问题。
 
-          
+解决方式12345678Make all swap offsudo 
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/09/webpack91%/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -547,33 +685,17 @@
       
         
           
-            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><hr>
-<p>去年开发的一个单页面spa应用，起初客户要求内网访问，加之项目周期短，所以首屏加载，性能优化等均没有注意。后来突然说要开放公网访问，普遍反应3g下页面打开比较慢。<br>执行以下命令，会自动打开浏览器并展示出一张显示各个文件大小及具体内容的图片。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build --report</span><br></pre></td></tr></table></figure></p>
-<p>分析过后，发现vendor.js文件大的离谱，足有2M大小，怪不得构建速度这么慢^^</p>
-<p>3g网络下平均网速大约为338kb/s，普通用户期望等待时间不超过3s，所以理论上首屏加载的资源大小不宜超过1014kb<br>以此为目标，开始了性能优化之路，记录如下：</p>
-<hr>
-<h1 id="1-分包加载"><a href="#1-分包加载" class="headerlink" title="1 分包加载"></a>1 分包加载</h1><h2 id="1-1-webpack配置"><a href="#1-1-webpack配置" class="headerlink" title="1.1 webpack配置"></a>1.1 webpack配置</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> output: &#123;</span><br><span class="line">    path: path.join(__dirname, <span class="string">'/../dist/assets'</span>),</span><br><span class="line">    filename: <span class="string">'app.js'</span>,</span><br><span class="line">    publicPath: defaultSettings.publicPath,</span><br><span class="line">    <span class="comment">// 添加 chunkFilename</span></span><br><span class="line">    chunkFilename: <span class="string">'[id].[chunkhash].js'</span>,</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<h3 id="1-2-路由懒加载"><a href="#1-2-路由懒加载" class="headerlink" title="1.2 路由懒加载"></a>1.2 路由懒加载</h3><p>我们按把每个路由组件(即spa应用的每个页面)打包成一个js文件，进入页面的时候，再去加载。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> AddressList = <span class="function"><span class="params">r</span> =&gt;</span> <span class="built_in">require</span>.ensure([], () =&gt; r(<span class="built_in">require</span>(<span class="string">'@/pages/staff-self/addressList/addressList'</span>)), <span class="string">'addressList'</span>)</span><br></pre></td></tr></table></figure></p>
-<p>require.ensure(dependencies, callback, chunkName) 是webpack提供的按需加载的核心方法</p>
-<h3 id="1-3-一点思考"><a href="#1-3-一点思考" class="headerlink" title="1.3 一点思考"></a>1.3 一点思考</h3><p>分包加载会在用户进入某个页面之前，要先下载完这个页面的js文件，再展示内容。导致的现象就是用户点击了新页面，但是延迟进入，用户会认为当前应用比较卡，性能不好，影响了SPA提供的类原生应用的交互体验。解决方法是可以从两个方向考虑：</p>
-<h4 id="1-3-1-提供动画交互"><a href="#1-3-1-提供动画交互" class="headerlink" title="1.3.1 提供动画交互"></a>1.3.1 提供动画交互</h4><p>一个加载动画会提示用户，我们正在努力加载，而不是卡顿了。如菊花图，骨架屏，亦或是顶部加载条（虽然百分比都是假的）</p>
-<h4 id="1-3-2-用户行为分析"><a href="#1-3-2-用户行为分析" class="headerlink" title="1.3.2 用户行为分析"></a>1.3.2 用户行为分析</h4><p>采用埋点等方式统计大部分用户的使用习惯，预先加载相关联的页面</p>
-<h1 id="2-尽量使用CDN加载"><a href="#2-尽量使用CDN加载" class="headerlink" title="2 尽量使用CDN加载"></a>2 尽量使用CDN加载</h1><p>不常改变的依赖库，如Vue.js loadsh.js等可使用CDN引入项目，除了CDN本身的优点之外，如果用户之前访问的网站从相同的CDN上加载过这些js的库，我们的站点再引用的时候，就不用再去下载了。<br>webpack需要做如下配置:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">externals: &#123;</span><br><span class="line">  jquery: <span class="string">'jQuery'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>配置后，下面展示的代码还可以正常运行：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> $ <span class="keyword">from</span> <span class="string">'jquery'</span>;</span><br></pre></td></tr></table></figure></p>
-<h1 id="3-线上代码去掉SourceMap"><a href="#3-线上代码去掉SourceMap" class="headerlink" title="3 线上代码去掉SourceMap"></a>3 线上代码去掉SourceMap</h1><p>webpack配置：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">productionSourceMap: <span class="literal">false</span></span><br></pre></td></tr></table></figure></p>
-<h1 id="4-gzip压缩js代码"><a href="#4-gzip压缩js代码" class="headerlink" title="4 gzip压缩js代码"></a>4 gzip压缩js代码</h1><p>服务器收到浏览器资源请求，监测到request header有如下字段：Accept-Encoding: gzip<br>表示浏览器支持gzip文件解压，如果服务器上存放有目标文件的gzip文件，会把gzip文件返回给浏览器，浏览器再完成解压。</p>
-<h2 id="4-1-构建时gzip压缩"><a href="#4-1-构建时gzip压缩" class="headerlink" title="4.1 构建时gzip压缩"></a>4.1 构建时gzip压缩</h2><p>使用webpack的压缩插件<a href="https://webpack.docschina.org/plugins/compression-webpack-plugin/" target="_blank" rel="noopener">compression-webpack-plugin</a><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm i -D compression-webpack-plugin</span><br></pre></td></tr></table></figure></p>
-<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">plugins:[</span><br><span class="line">   <span class="keyword">new</span> CompressionPlugin(&#123;</span><br><span class="line">      asset: <span class="string">"[path].gz[query]"</span>,</span><br><span class="line">      algorithm: <span class="string">"gzip"</span>,</span><br><span class="line">      test: <span class="regexp">/\.js$|\.json$/</span>,</span><br><span class="line">      threshold: <span class="number">10240</span>,</span><br><span class="line">      minRatio: <span class="number">0.5</span></span><br><span class="line">    &#125;)</span><br><span class="line">]</span><br></pre></td></tr></table></figure>
-<p>配置成功后，打包后的产出文件会多出一些*.gz.js文件</p>
-<h2 id="4-2-服务器支持"><a href="#4-2-服务器支持" class="headerlink" title="4.2 服务器支持"></a>4.2 服务器支持</h2><p>nginx配置示例</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">gzip             on;</span><br><span class="line">gzip_min_length  1k;</span><br><span class="line">gzip_comp_level  6;</span><br><span class="line">gzip_proxied     expired no-cache no-store private auth;</span><br><span class="line">gzip_types       text/plain application/x-javascript text/css application/xml application/javascript application/json;</span><br></pre></td></tr></table></figure>
-<h1 id="5-代码层面优化"><a href="#5-代码层面优化" class="headerlink" title="5 代码层面优化"></a>5 代码层面优化</h1><h2 id="5-1-减少请求数"><a href="#5-1-减少请求数" class="headerlink" title="5.1 减少请求数"></a>5.1 减少请求数</h2><p>无论是pc还是移动终端，操作系统都会限制浏览器对单个domain的并发请求数，防止占用过多系统资源（Android支持4个，iOS 5后可支持6个）<br>建议通过合并js css，使用雪碧图等技术，使浏览器并发请求数不超过4个，也可以启用和主站不同的域名存放资源</p>
-<h2 id="5-2-图片压缩及lazy-load"><a href="#5-2-图片压缩及lazy-load" class="headerlink" title="5.2 图片压缩及lazy load"></a>5.2 图片压缩及lazy load</h2><h3 id="5-2-1-使用icon-font，-svg代替图片"><a href="#5-2-1-使用icon-font，-svg代替图片" class="headerlink" title="5.2.1 使用icon font， svg代替图片"></a>5.2.1 使用icon font， svg代替图片</h3><h3 id="5-2-2-图片lazy-load"><a href="#5-2-2-图片lazy-load" class="headerlink" title="5.2.2 图片lazy load"></a>5.2.2 图片lazy load</h3><p>图片资源先加载一个很小的默认图片，当图片即将滚动到可视区域时，再加载真正的资源</p>
-<h2 id="5-3-异步加载脚本"><a href="#5-3-异步加载脚本" class="headerlink" title="5.3 异步加载脚本"></a>5.3 异步加载脚本</h2><h2 id="5-4-减少重绘和回流"><a href="#5-4-减少重绘和回流" class="headerlink" title="5.4 减少重绘和回流"></a>5.4 减少重绘和回流</h2><h2 id="5-5-注意使用函数节流"><a href="#5-5-注意使用函数节流" class="headerlink" title="5.5 注意使用函数节流"></a>5.5 注意使用函数节流</h2><p>特定场景下，需使用函数节流，如滚动加载，实时搜索等。</p>
-<h2 id="5-6-合理缓存数据"><a href="#5-6-合理缓存数据" class="headerlink" title="5.6 合理缓存数据"></a>5.6 合理缓存数据</h2><p>如html 5规定的localStorage, sessionStorage等api缓存接口数据</p>
-<h2 id="5-7-尝试使用PWA"><a href="#5-7-尝试使用PWA" class="headerlink" title="5.7 尝试使用PWA"></a>5.7 尝试使用PWA</h2><p>Progressive Web App, 简称 PWA，如果用户多为chrome浏览器用户，可以考虑使用</p>
-<h1 id="6-服务器配置合适的协议缓存规则"><a href="#6-服务器配置合适的协议缓存规则" class="headerlink" title="6 服务器配置合适的协议缓存规则"></a>6 服务器配置合适的协议缓存规则</h1>
-          
+          背景
+去年开发的一个单页面spa应用，起初客户要求内网访问，加之项目周期短，所以首屏加载，性能优化等均没有注意。后来突然说要开放公网访问，普遍反应3g下页面打开比较慢。执行以下命令，会自动打开浏览器并展示出一张显示各个文件大小及具体内容的图片。1npm run build --report
+分析过后
+          ...
+          <!--noindex-->
+          <div class="post-button text-center">
+            <a class="btn" href="/2018/08/09/前端性能优化/#more" rel="contents">
+              Read more &raquo;
+            </a>
+          </div>
+          <!--/noindex-->
         
       
     </div>
@@ -653,7 +775,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">3</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
