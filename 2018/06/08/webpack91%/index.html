@@ -79,14 +79,17 @@
 
 
 
+<meta name="description" content="背景 aws免费ec2示例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。 具体表现为，打包进度到达91%时就卡住了，等了进15分钟，不见好转。 考虑在个人机器上没有遇到此问题，低配置机器上出现，可能是配置问题。  解决方式12345678Make all swap offsudo swapoff -aResize the swapfilesudo dd if=/dev/zero">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用pm2启动带命令行参数的nodejs服务” ">
-<meta property="og:url" content="http://yoursite.com/2018/08/09/使用pm2启动带命令行参数的nodejs服务/index.html">
+<meta property="og:title" content="webpack打包时卡在91%，报错additional asset processing">
+<meta property="og:url" content="http://yoursite.com/2018/06/08/webpack91%/index.html">
 <meta property="og:site_name" content="Lyon Yang">
+<meta property="og:description" content="背景 aws免费ec2示例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。 具体表现为，打包进度到达91%时就卡住了，等了进15分钟，不见好转。 考虑在个人机器上没有遇到此问题，低配置机器上出现，可能是配置问题。  解决方式12345678Make all swap offsudo swapoff -aResize the swapfilesudo dd if=/dev/zero">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-09T11:45:51.254Z">
+<meta property="og:updated_time" content="2018-08-10T03:48:19.318Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用pm2启动带命令行参数的nodejs服务” ">
+<meta name="twitter:title" content="webpack打包时卡在91%，报错additional asset processing">
+<meta name="twitter:description" content="背景 aws免费ec2示例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。 具体表现为，打包进度到达91%时就卡住了，等了进15分钟，不见好转。 考虑在个人机器上没有遇到此问题，低配置机器上出现，可能是配置问题。  解决方式12345678Make all swap offsudo swapoff -aResize the swapfilesudo dd if=/dev/zero">
 
 
 
@@ -116,13 +119,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/08/09/使用pm2启动带命令行参数的nodejs服务/"/>
+  <link rel="canonical" href="http://yoursite.com/2018/06/08/webpack91%/"/>
 
 
 
 
 
-  <title>使用pm2启动带命令行参数的nodejs服务”  | Lyon Yang</title>
+  <title>webpack打包时卡在91%，报错additional asset processing | Lyon Yang</title>
   
 
 
@@ -229,7 +232,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/08/09/使用pm2启动带命令行参数的nodejs服务/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/06/08/webpack91%/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Lyon Yang">
@@ -246,7 +249,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">使用pm2启动带命令行参数的nodejs服务” </h1>
+          <h1 class="post-title" itemprop="name headline">webpack打包时卡在91%，报错additional asset processing</h1>
         
 
         <div class="post-meta">
@@ -258,8 +261,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-09T19:45:41+08:00">
-                2018-08-09
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-06-08T21:26:12+08:00">
+                2018-06-08
               </time>
             
 
@@ -296,7 +299,16 @@
       
 
       
-        
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><hr>
+<p>aws免费ec2示例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。</p>
+<p>具体表现为，打包进度到达91%时就卡住了，等了进15分钟，不见好转。</p>
+<p>考虑在个人机器上没有遇到此问题，低配置机器上出现，可能是配置问题。</p>
+<hr>
+<h1 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Make all swap off</span><br><span class="line">sudo swapoff -a</span><br><span class="line">Resize the swapfile</span><br><span class="line">sudo dd <span class="keyword">if</span>=/dev/zero of=/swapfile bs=1M count=1024</span><br><span class="line">Make swapfile usable</span><br><span class="line">sudo mkswap /swapfile</span><br><span class="line">Make swapon again</span><br><span class="line">sudo swapon /swapfile</span><br></pre></td></tr></table></figure>
+<h1 id="关于swap文件"><a href="#关于swap文件" class="headerlink" title="关于swap文件"></a>关于swap文件</h1><p>当系统的物理内存不够用的时候，就需要将物理内存中的一部分空间释放出来，以供当前运行的程序使用。那些被释放的空间可能来自一些很长时间没有什么操作的程序，这些被释放的空间被临时保存到Swap空间中，等到那些程序要运行时，再从Swap中恢复保存的数据到内存中。这样，系统总是在物理内存不够时，才进行Swap交换。</p>
+<p>而由于我们的机器只有1G内存，所以打包时，内存被占满，原有的swap空间也已经被占满了，所以webpack从硬盘读出来的数据无法加载进内存中，也就无法为我们继续打包了。</p>
+<p>至于为什么被卡在91%，猜测是webpack不是一次把所有资源都从硬盘读进内存，而是边打包边寻找依赖，从硬盘读出。所以weboack实际上应该是不知道当前打包进度的，91%应该也只是个假的，类似于网站的顶部加载条。</p>
+
       
     </div>
     
@@ -320,8 +332,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/06/10/PWA在实际项目中如何使用？/" rel="next" title="PWA在实际项目中如何使用？">
-                <i class="fa fa-chevron-left"></i> PWA在实际项目中如何使用？
+              <a href="/2017/12/09/前端性能优化/" rel="next" title="记一次移动前端SPA应用性能优化体验">
+                <i class="fa fa-chevron-left"></i> 记一次移动前端SPA应用性能优化体验
               </a>
             
           </div>
@@ -329,6 +341,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/06/10/PWA在实际项目中如何使用？/" rel="prev" title="PWA在实际项目中如何使用？">
+                PWA在实际项目中如何使用？ <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -380,8 +396,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -423,6 +448,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#背景"><span class="nav-number">1.</span> <span class="nav-text">背景</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#解决方式"><span class="nav-number">2.</span> <span class="nav-text">解决方式</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#关于swap文件"><span class="nav-number">3.</span> <span class="nav-text">关于swap文件</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
