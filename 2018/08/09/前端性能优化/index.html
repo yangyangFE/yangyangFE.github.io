@@ -79,17 +79,17 @@
 
 
 
-<meta name="description" content="3g网络下平均网速大约为338kb/s，普通用户期望等待时间不超过3s，所以理论上首屏加载的资源大小不宜超过1014kb以此为目标，开始了前端性能优化之路，记录如下：">
+<meta name="description" content="背景 去年开发的一个单页面spa应用，起初客户要求内网访问，加之项目周期短，所以首屏加载，性能优化等均没有注意。后来突然说要开放公网访问，普遍反应3g下页面打开比较慢。执行以下命令，会自动打开浏览器并展示出一张显示各个文件大小及具体内容的图片。1npm run build --report 分析过后，发现vendor.js文件大的离谱，足有2M大小，怪不得构建速度这么慢^^ 3g网络下平均网速大约">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次移动前端SPA应用性能优化体验">
 <meta property="og:url" content="http://yoursite.com/2018/08/09/前端性能优化/index.html">
 <meta property="og:site_name" content="Lyon Yang">
-<meta property="og:description" content="3g网络下平均网速大约为338kb/s，普通用户期望等待时间不超过3s，所以理论上首屏加载的资源大小不宜超过1014kb以此为目标，开始了前端性能优化之路，记录如下：">
+<meta property="og:description" content="背景 去年开发的一个单页面spa应用，起初客户要求内网访问，加之项目周期短，所以首屏加载，性能优化等均没有注意。后来突然说要开放公网访问，普遍反应3g下页面打开比较慢。执行以下命令，会自动打开浏览器并展示出一张显示各个文件大小及具体内容的图片。1npm run build --report 分析过后，发现vendor.js文件大的离谱，足有2M大小，怪不得构建速度这么慢^^ 3g网络下平均网速大约">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-10T02:10:32.145Z">
+<meta property="og:updated_time" content="2018-08-10T02:11:53.992Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次移动前端SPA应用性能优化体验">
-<meta name="twitter:description" content="3g网络下平均网速大约为338kb/s，普通用户期望等待时间不超过3s，所以理论上首屏加载的资源大小不宜超过1014kb以此为目标，开始了前端性能优化之路，记录如下：">
+<meta name="twitter:description" content="背景 去年开发的一个单页面spa应用，起初客户要求内网访问，加之项目周期短，所以首屏加载，性能优化等均没有注意。后来突然说要开放公网访问，普遍反应3g下页面打开比较慢。执行以下命令，会自动打开浏览器并展示出一张显示各个文件大小及具体内容的图片。1npm run build --report 分析过后，发现vendor.js文件大的离谱，足有2M大小，怪不得构建速度这么慢^^ 3g网络下平均网速大约">
 
 
 
@@ -299,9 +299,7 @@
       
 
       
-        <p>3g网络下平均网速大约为338kb/s，普通用户期望等待时间不超过3s，所以理论上首屏加载的资源大小不宜超过1014kb<br>以此为目标，开始了前端性能优化之路，记录如下：</p>
-<a id="more"></a>
-<h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><hr>
+        <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><hr>
 <p>去年开发的一个单页面spa应用，起初客户要求内网访问，加之项目周期短，所以首屏加载，性能优化等均没有注意。后来突然说要开放公网访问，普遍反应3g下页面打开比较慢。<br>执行以下命令，会自动打开浏览器并展示出一张显示各个文件大小及具体内容的图片。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm run build --report</span><br></pre></td></tr></table></figure></p>
 <p>分析过后，发现vendor.js文件大的离谱，足有2M大小，怪不得构建速度这么慢^^</p>
 <p>3g网络下平均网速大约为338kb/s，普通用户期望等待时间不超过3s，所以理论上首屏加载的资源大小不宜超过1014kb<br>以此为目标，开始了性能优化之路，记录如下：</p>
