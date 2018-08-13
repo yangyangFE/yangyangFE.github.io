@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next muse use-motion" lang="">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+<meta name="google-site-verification" content="lKbP-ek7t9TRfsADACsrZe5uhLRkh7mh-tmtrSMnv8s" />
+<meta name="baidu-site-verification" content="7kkPfg9brf" />
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Hexo, NexT" />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="前言如果你的业务既需要SPA的强交互性，又对SEO和首屏加载有刚性需求，作为前端工程师，又想通过BFF架构掌握更多主动权。但是又不敢轻易尝试，可以参考一下我的经历。 一开始我是想基于vue cli + element-ui快速开发上线，得知需要支持SEO后，打算加一个prerender来做的。后来同事建议可以尝试BFF架构，在node层做一些BI报表类的功能，加之综合考察后，发现国内已经有一些基于">
+<meta property="og:type" content="article">
+<meta property="og:title" content="基于vue ssr + nuxt + koa2开发web应用">
+<meta property="og:url" content="https://yangyangfe.github.io/2018/08/13/基于vue-ssr-nuxt-koa2开发web应用/index.html">
+<meta property="og:site_name" content="Lyon Yang">
+<meta property="og:description" content="前言如果你的业务既需要SPA的强交互性，又对SEO和首屏加载有刚性需求，作为前端工程师，又想通过BFF架构掌握更多主动权。但是又不敢轻易尝试，可以参考一下我的经历。 一开始我是想基于vue cli + element-ui快速开发上线，得知需要支持SEO后，打算加一个prerender来做的。后来同事建议可以尝试BFF架构，在node层做一些BI报表类的功能，加之综合考察后，发现国内已经有一些基于">
+<meta property="og:locale" content="default">
+<meta property="og:updated_time" content="2018-08-13T09:29:13.545Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="基于vue ssr + nuxt + koa2开发web应用">
+<meta name="twitter:description" content="前言如果你的业务既需要SPA的强交互性，又对SEO和首屏加载有刚性需求，作为前端工程师，又想通过BFF架构掌握更多主动权。但是又不敢轻易尝试，可以参考一下我的经历。 一开始我是想基于vue cli + element-ui快速开发上线，得知需要支持SEO后，打算加一个prerender来做的。后来同事建议可以尝试BFF架构，在node层做一些BI报表类的功能，加之综合考察后，发现国内已经有一些基于">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Muse',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: 'Author'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="https://yangyangfe.github.io/2018/08/13/基于vue-ssr-nuxt-koa2开发web应用/"/>
+
+
+
+
+
+  <title>基于vue ssr + nuxt + koa2开发web应用 | Lyon Yang</title>
+  
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="default">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Lyon Yang</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            Home
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            Archives
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="https://yangyangfe.github.io/2018/08/13/基于vue-ssr-nuxt-koa2开发web应用/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Lyon Yang">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Lyon Yang">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">基于vue ssr + nuxt + koa2开发web应用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2018-08-13T14:28:05+08:00">
+                2018-08-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>如果你的业务既需要SPA的强交互性，又对SEO和首屏加载有刚性需求，作为前端工程师，又想通过BFF架构掌握更多主动权。<br>但是又不敢轻易尝试，可以参考一下我的经历。</p>
+<p>一开始我是想基于vue cli + element-ui快速开发上线，得知需要支持SEO后，打算加一个prerender来做的。<br>后来同事建议可以尝试BFF架构，在node层做一些BI报表类的功能，加之综合考察后，发现国内已经有一些基于nuxt的线上项目，<br>于是决定使用nuxt结合koa2来做。</p>
+<h2 id="搭建开发环境"><a href="#搭建开发环境" class="headerlink" title="搭建开发环境"></a>搭建开发环境</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">npm install -g yarn</span><br><span class="line">yarn vue init nuxt/koa nuxtProject</span><br><span class="line"><span class="built_in">cd</span> nuxtProject</span><br><span class="line">yarn</span><br><span class="line">yarn run dev</span><br></pre></td></tr></table></figure>
+<p>在浏览器打开<a href="http://127.0.0.1:3000/" target="_blank" rel="noopener">http://127.0.0.1:3000/</a>即可查看效果。</p>
+<h2 id="改造客户端配置"><a href="#改造客户端配置" class="headerlink" title="改造客户端配置"></a>改造客户端配置</h2><p>为方便管理，我们把前端相关资源全部迁移到views目录下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mkdir views</span><br><span class="line">mv assets/ components/ layouts/ static/ pages/ views/</span><br></pre></td></tr></table></figure></p>
+<p>在nuxt.config.js文件中添加如下配置项<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">srcDir: <span class="string">'views/'</span>,</span><br></pre></td></tr></table></figure></p>
+<h2 id="改造服务端配置"><a href="#改造服务端配置" class="headerlink" title="改造服务端配置"></a>改造服务端配置</h2><p>新建controller service DAO middlreware目录<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">mkdir controller service DAO middlreware</span><br></pre></td></tr></table></figure></p>
+<h3 id="middlreware"><a href="#middlreware" class="headerlink" title="middlreware"></a>middlreware</h3><p>middlreware主要存放我们自己写的一些koa中间件文件，如token认证中间件，我们在这里写一个rest中间件,为ctx绑定rest方法，返回请求数据<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> logger = <span class="built_in">require</span>(<span class="string">'koa-log4'</span>).getLogger(<span class="string">'app'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  APIError: <span class="function"><span class="keyword">function</span> (<span class="params">message, code</span>) </span>&#123;</span><br><span class="line">    logger.error(code + <span class="string">':'</span> + message)</span><br><span class="line">    <span class="keyword">this</span>.code = code || <span class="string">'400'</span>;</span><br><span class="line">    <span class="keyword">this</span>.message = message || <span class="string">''</span></span><br><span class="line">  &#125;,</span><br><span class="line">  restify: <span class="function">(<span class="params">pathPrefix</span>) =&gt;</span> &#123;</span><br><span class="line">    pathPrefix = pathPrefix || <span class="string">'/api/'</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">        <span class="keyword">if</span> (ctx.request.path.startsWith(pathPrefix)) &#123;</span><br><span class="line">            <span class="comment">// 绑定rest()方法:</span></span><br><span class="line">            ctx.rest = <span class="function">(<span class="params">data, statusCode, message</span>) =&gt;</span> &#123;</span><br><span class="line">                ctx.response.type = <span class="string">'application/json'</span></span><br><span class="line">                ctx.response.body = &#123;</span><br><span class="line">                    data: data,</span><br><span class="line">                    statusCode: statusCode || <span class="number">200</span>,</span><br><span class="line">                    message: message || <span class="string">'OK'</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            ctx.err = <span class="function">(<span class="params">message, data, statusCode</span>) =&gt;</span> &#123;</span><br><span class="line">                ctx.response.type = <span class="string">'application/json'</span></span><br><span class="line">                ctx.response.body = &#123;</span><br><span class="line">                    data: data || &#123;&#125;,</span><br><span class="line">                    statusCode: statusCode || <span class="number">300</span>,</span><br><span class="line">                    message: message || <span class="string">'Server exception'</span></span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">await</span> next()</span><br><span class="line">            &#125; <span class="keyword">catch</span> (e) &#123;</span><br><span class="line">                <span class="comment">// 返回错误:</span></span><br><span class="line">                ctx.response.status = <span class="number">500</span></span><br><span class="line">                ctx.response.type = <span class="string">'application/json'</span></span><br><span class="line">                ctx.response.body = &#123;</span><br><span class="line">                    statusCode: e.code || <span class="string">'internal:unknown_error'</span>,</span><br><span class="line">                    message: e.message || <span class="string">''</span></span><br><span class="line">                &#125;;</span><br><span class="line">                <span class="keyword">return</span> </span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">await</span> next()</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>然后我们在server/index.js中使用这个中间件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> rest = <span class="built_in">require</span>(<span class="string">'./middlreware/rest'</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// rest middlreware</span></span><br><span class="line">app.use(rest.restify())</span><br></pre></td></tr></table></figure></p>
+<h3 id="controller"><a href="#controller" class="headerlink" title="controller"></a>controller</h3><p>controller主要是后端路由层,首先我们安装koa-router<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add koa-router</span><br></pre></td></tr></table></figure></p>
+<p>新建一个controller/user.js，写入以下代码：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">const</span> router = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)()</span><br><span class="line">router.get(<span class="string">'/index'</span>, <span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">  ctx.rest(<span class="string">'hello koa2'</span>)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="built_in">module</span>.exports = router</span><br></pre></td></tr></table></figure></p>
+<p>为了不用每次加一个controller文件，都手动引入到server/index.js中，新建一个middlreware/autoRoutes.js文件做自动扫描<br>为了防止客户端路由和服务端路由冲突，我们为所有的服务端路由加上了一个前缀 /api/<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> router  = <span class="built_in">require</span>(<span class="string">'koa-router'</span>)()</span><br><span class="line"><span class="keyword">const</span> path    = <span class="built_in">require</span>(<span class="string">'path'</span>)</span><br><span class="line"><span class="keyword">const</span> fs      = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="comment">// 服务端路由前缀</span></span><br><span class="line"><span class="keyword">const</span> baseUrl =  <span class="string">'/api/'</span></span><br><span class="line"><span class="keyword">var</span> exports  = &#123;&#125;</span><br><span class="line"></span><br><span class="line">exports[<span class="string">'auto'</span>] = <span class="function"><span class="keyword">function</span> (<span class="params">app</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">let</span> files = fs.readdirSync(path.join(__dirname, <span class="string">'../controllers'</span>))</span><br><span class="line">  <span class="keyword">let</span> jsFiles = files.filter(<span class="function">(<span class="params">f</span>) =&gt;</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> f.endsWith(<span class="string">'.js'</span>)</span><br><span class="line">  &#125;, files)</span><br><span class="line"></span><br><span class="line">  <span class="keyword">for</span> (<span class="keyword">let</span> f <span class="keyword">of</span> jsFiles) &#123;</span><br><span class="line">    <span class="built_in">console</span>.log(<span class="string">`import controller from <span class="subst">$&#123;f&#125;</span>...`</span>)</span><br><span class="line">    <span class="keyword">let</span> name = f.substring(<span class="number">0</span>, f.length - <span class="number">3</span>)</span><br><span class="line">    exports[name] = <span class="built_in">require</span>(<span class="string">'../controllers/'</span> + f)</span><br><span class="line">    router.use(baseUrl + name, exports[name].routes(), exports[name].allowedMethods())</span><br><span class="line">    app.use(exports[name].routes(), exports[name].allowedMethods())</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = exports</span><br></pre></td></tr></table></figure></p>
+<p>在server/indes.js中加入<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> AutoRoutes = <span class="built_in">require</span>(<span class="string">'./middlreware/autoRoutes'</span>)</span><br><span class="line"></span><br><span class="line">AutoRoutes.auto(app)</span><br></pre></td></tr></table></figure></p>
+<p>重新启动服务，浏览器里访问<a href="http://127.0.0.1:3000/api/user/index" target="_blank" rel="noopener">http://127.0.0.1:3000/api/user/index</a>即可看到接口返回的结果。</p>
+<h3 id="service层"><a href="#service层" class="headerlink" title="service层"></a>service层</h3><p>我们新建一个service/baseService.js文件,写入以下内容:<br>YMBaseService作为所有Service类的父类，提供一些通用功能等<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="class"><span class="keyword">class</span> <span class="title">YMBaseService</span></span>&#123;</span><br><span class="line">  <span class="keyword">async</span> sendMail(title, content, address) &#123;</span><br><span class="line">    <span class="comment">// 用nodemai模块发邮件</span></span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>再新建一个server/service/user/index.js文件,写入以下内容<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> YMBaseService = <span class="built_in">require</span>(<span class="string">'../YMBaseService'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="class"><span class="keyword">class</span> <span class="title">UserService</span> <span class="keyword">extends</span> <span class="title">YMBaseService</span></span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">super</span>()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> setUser()&#123;</span><br><span class="line">    <span class="keyword">this</span>.user = <span class="string">'lyon yang'</span></span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">async</span> getUser()&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>.user</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>我们便可以在controller中调用service</p>
+<h3 id="DAO层"><a href="#DAO层" class="headerlink" title="DAO层"></a>DAO层</h3><p>DAO层主要做数据库处理的相关操作，这里我们以mysql为例<br>安装node mysql驱动<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add mysql</span><br></pre></td></tr></table></figure></p>
+<p>在根目录下创建一个dbconfig.js文件作为数据库配置文件<br>写入如下配置:<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">  <span class="string">"host"</span>     : <span class="string">"localhost"</span>, <span class="comment">// 数据库服务器ip</span></span><br><span class="line">  <span class="string">"user"</span>     : <span class="string">"root"</span>,</span><br><span class="line">  <span class="string">"password"</span> : <span class="string">"12354"</span>, <span class="comment">// 换成你自己等数据库密码</span></span><br><span class="line">  <span class="string">"database"</span> : <span class="string">"offer_test"</span>,</span><br><span class="line">  <span class="string">"port"</span>     : <span class="number">3306</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>新建一个DAO/baseDAO.js文件，写入<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> dbconf = <span class="built_in">require</span> (<span class="string">'../../config/base.conf'</span>).dbConf</span><br><span class="line"><span class="keyword">const</span> APIError = <span class="built_in">require</span>(<span class="string">'../middlreware/rest'</span>).APIError</span><br><span class="line"><span class="keyword">const</span> mysql = <span class="built_in">require</span>(<span class="string">'mysql'</span>)</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="class"><span class="keyword">class</span> <span class="title">YMBaseDAO</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>() &#123;</span><br><span class="line">    <span class="keyword">this</span>.connect()</span><br><span class="line">    <span class="keyword">this</span>.connection = &#123;&#125;</span><br><span class="line">  &#125;</span><br><span class="line">  </span><br><span class="line">  <span class="comment">// 创建连接池</span></span><br><span class="line">  <span class="keyword">async</span> connect() &#123;</span><br><span class="line">    <span class="keyword">const</span> connectionPool =  mysql.createPool(dbconf)</span><br><span class="line">    <span class="keyword">await</span> connectionPool.getConnection(<span class="function">(<span class="params">err,connection</span>) =&gt;</span> &#123;</span><br><span class="line">      <span class="keyword">if</span> (err) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> APIError(err)</span><br><span class="line">      &#125;</span><br><span class="line">      <span class="keyword">this</span>.connection = connection</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 使用node-mysql提供的数据库操作方法，防sql注入</span></span><br><span class="line">  <span class="keyword">async</span> query (sql, values)&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> <span class="built_in">Promise</span>(<span class="function">(<span class="params"> resolve, reject </span>) =&gt;</span> &#123;</span><br><span class="line">      pool.getConnection(<span class="function"><span class="keyword">function</span>(<span class="params">connctErr, connection</span>) </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (connctErr) &#123;</span><br><span class="line">          <span class="keyword">throw</span> <span class="keyword">new</span> APIError(connctErr)</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">          connection.query(sql, values, ( err, rows) =&gt; &#123;</span><br><span class="line">            <span class="keyword">if</span> ( err ) &#123;</span><br><span class="line">              <span class="keyword">throw</span> <span class="keyword">new</span> APIError(err)</span><br><span class="line">            &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">              resolve( rows )</span><br><span class="line">            &#125;</span><br><span class="line">            connection.release()</span><br><span class="line">          &#125;)</span><br><span class="line">        &#125;</span><br><span class="line">      &#125;)</span><br><span class="line">    &#125;)</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>新建一个DAO/userDAO.js文件<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> YMBaseDAO = <span class="built_in">require</span>(<span class="string">'./YMBaseDAO'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> $sql = &#123;</span><br><span class="line">  queryById: <span class="string">'select * from user where user_id=?'</span>,</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">module</span>.exports = <span class="class"><span class="keyword">class</span> <span class="title">UserDAO</span> <span class="keyword">extends</span> <span class="title">YMBaseDAO</span> </span>&#123;</span><br><span class="line">  <span class="keyword">constructor</span>()&#123;</span><br><span class="line">    <span class="keyword">super</span>()</span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  <span class="keyword">async</span> queryById(id) &#123;</span><br><span class="line">    <span class="keyword">let</span> result = <span class="keyword">await</span> <span class="keyword">this</span>.query($sql.queryById, [id])</span><br><span class="line">    <span class="keyword">return</span> <span class="built_in">JSON</span>.parse(<span class="built_in">JSON</span>.stringify(result))</span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="静态资源服务器"><a href="#静态资源服务器" class="headerlink" title="静态资源服务器"></a>静态资源服务器</h3><p>接下来，我们用koa2实现一个静态资源服务器<br>安装koa-static<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add koa-static</span><br></pre></td></tr></table></figure></p>
+<p>server/index.js 中加入<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> koaStatic  = <span class="built_in">require</span>(<span class="string">'koa-static'</span>)</span><br><span class="line"><span class="comment">// 静态资源存放目录</span></span><br><span class="line"><span class="keyword">const</span> staticPath = <span class="string">'./static'</span></span><br><span class="line"></span><br><span class="line">  <span class="comment">// static service</span></span><br><span class="line">  app.use(convert(koaStatic(</span><br><span class="line">    path.join( __dirname,  staticPath)</span><br><span class="line">  )));</span><br></pre></td></tr></table></figure></p>
+<h3 id="日志功能"><a href="#日志功能" class="headerlink" title="日志功能"></a>日志功能</h3><p>没有日志的线上项目是不可靠的，使用koa-log4搭建日志模块<br>安装koa-static<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">yarn add koa-log4</span><br></pre></td></tr></table></figure></p>
+<p>根目录下新建一个log4jsConf.js文件，作为日志配置文件，log4的具体配置这里就不多讲了。<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    <span class="string">"appenders"</span>: &#123;</span><br><span class="line">      <span class="string">"access"</span>: &#123;</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"dateFile"</span>,</span><br><span class="line">        <span class="string">"filename"</span>: <span class="string">"log/access.log"</span>,</span><br><span class="line">        <span class="string">"pattern"</span>: <span class="string">"-yyyy-MM-dd"</span>,</span><br><span class="line">        <span class="string">"category"</span>: <span class="string">"http"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">"app"</span>: &#123;</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"file"</span>,</span><br><span class="line">        <span class="string">"filename"</span>: <span class="string">"log/app.log"</span>,</span><br><span class="line">        <span class="string">"maxLogSize"</span>: <span class="number">10485760</span>,</span><br><span class="line">        <span class="string">"numBackups"</span>: <span class="number">3</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">"errorFile"</span>: &#123;</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"dateFile"</span>,</span><br><span class="line">        <span class="string">"filename"</span>: <span class="string">"log/errors.log"</span>,</span><br><span class="line">        <span class="string">"pattern"</span>: <span class="string">"-yyyy-MM-dd"</span>,</span><br><span class="line">        <span class="string">"category"</span>: <span class="string">"http"</span></span><br><span class="line">      &#125;,</span><br><span class="line">      <span class="string">"errors"</span>: &#123;</span><br><span class="line">        <span class="string">"type"</span>: <span class="string">"logLevelFilter"</span>,</span><br><span class="line">        <span class="string">"level"</span>: <span class="string">"ERROR"</span>,</span><br><span class="line">        <span class="string">"appender"</span>: <span class="string">"errorFile"</span></span><br><span class="line">      &#125;</span><br><span class="line">    &#125;,</span><br><span class="line">    <span class="string">"categories"</span>: &#123;</span><br><span class="line">      <span class="string">"default"</span>: &#123; <span class="string">"appenders"</span>: [ <span class="string">"app"</span>, <span class="string">"errors"</span> ], <span class="string">"level"</span>: <span class="string">"DEBUG"</span> &#125;,</span><br><span class="line">      <span class="string">"http"</span>: &#123; <span class="string">"appenders"</span>: [ <span class="string">"access"</span>], <span class="string">"level"</span>: <span class="string">"info"</span> &#125;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure></p>
+<p>server/index.js 中加入<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> Log4js     = <span class="built_in">require</span>(<span class="string">'koa-log4'</span>)</span><br><span class="line"><span class="keyword">const</span> logConfig  = <span class="built_in">require</span>(<span class="string">'log4jsConf'</span>)</span><br><span class="line"><span class="keyword">const</span> logger     = Log4js.getLogger(<span class="string">'app'</span>)</span><br><span class="line"><span class="keyword">const</span> logPath    = path.join(__dirname, <span class="string">'../log'</span>)</span><br><span class="line">  <span class="comment">// 创建日志目录</span></span><br><span class="line">  <span class="keyword">try</span> &#123;</span><br><span class="line">    <span class="built_in">require</span>(<span class="string">'fs'</span>).mkdirSync(logPath)</span><br><span class="line">  &#125; <span class="keyword">catch</span> (err) &#123;</span><br><span class="line">    <span class="keyword">if</span> (err.code !== <span class="string">'EEXIST'</span>) &#123;</span><br><span class="line">      <span class="built_in">console</span>.error(<span class="string">'Could not set up log directory, error was: '</span>, err)</span><br><span class="line">      process.exit(<span class="number">1</span>)</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;</span><br><span class="line">  Log4js.configure(logConfig, &#123;<span class="attr">cwd</span>: logPath&#125;)</span><br><span class="line">  <span class="comment">// 记录http请求</span></span><br><span class="line">  app.use(Log4js.koaLogger(Log4js.getLogger(<span class="string">'http'</span>), &#123;<span class="attr">level</span>: <span class="string">'auto'</span>&#125;))</span><br><span class="line"></span><br><span class="line">  <span class="comment">// 在koa2执行上下文中直接绑定打印日志的方法</span></span><br><span class="line">  app.use(<span class="keyword">async</span> (ctx, next) =&gt; &#123;</span><br><span class="line">    ctx.Log4js = Log4js  <span class="comment">//给koa2上下文添加Log4js</span></span><br><span class="line">    <span class="keyword">await</span> next()</span><br><span class="line">  &#125;)</span><br></pre></td></tr></table></figure></p>
+<h3 id="前端报错收集"><a href="#前端报错收集" class="headerlink" title="前端报错收集"></a>前端报错收集</h3><p>作为一个工程师，产出项目的可靠性也是很值得我们关注的，可以在前端页面用windos.onerror事件收集错误，发送到我们的node服务器，node服务器接收后，通过邮件发送我们注意,也可以使用<a href="https://www.fundebug.com/" target="_blank" rel="noopener">fundebug</a>这种第三方监测工具。</p>
+<h3 id="auth认证"><a href="#auth认证" class="headerlink" title="auth认证"></a>auth认证</h3><p>这里可以使用koa-jwt模块来做成中间件，具体不再赘述。</p>
+<h4 id="上线发布"><a href="#上线发布" class="headerlink" title="上线发布"></a>上线发布</h4><p>至此，一个基于js的web应用已经基本全部开发好了，接下来便是上线<br>可以使用<a href="http://pm2.keymetrics.io/" target="_blank" rel="noopener">pm2</a>进行上线部署，也推荐大家基于Docker部署。<br>要注意的是，数据库定时备份，异地备份一定要做好…</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/08/13/傻瓜式打包程序parcel实践/" rel="next" title="傻瓜式打包程序parcel实践">
+                <i class="fa fa-chevron-left"></i> 傻瓜式打包程序parcel实践
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            Table of Contents
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            Overview
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Lyon Yang</p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/">
+              
+                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-name">posts</span>
+                </a>
+              </div>
+            
+
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                
+                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-name">tags</span>
+                
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#搭建开发环境"><span class="nav-number">1.1.</span> <span class="nav-text">搭建开发环境</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改造客户端配置"><span class="nav-number">1.2.</span> <span class="nav-text">改造客户端配置</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#改造服务端配置"><span class="nav-number">1.3.</span> <span class="nav-text">改造服务端配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#middlreware"><span class="nav-number">1.3.1.</span> <span class="nav-text">middlreware</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#controller"><span class="nav-number">1.3.2.</span> <span class="nav-text">controller</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#service层"><span class="nav-number">1.3.3.</span> <span class="nav-text">service层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DAO层"><span class="nav-number">1.3.4.</span> <span class="nav-text">DAO层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#静态资源服务器"><span class="nav-number">1.3.5.</span> <span class="nav-text">静态资源服务器</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#日志功能"><span class="nav-number">1.3.6.</span> <span class="nav-text">日志功能</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前端报错收集"><span class="nav-number">1.3.7.</span> <span class="nav-text">前端报错收集</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#auth认证"><span class="nav-number">1.3.8.</span> <span class="nav-text">auth认证</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#上线发布"><span class="nav-number">1.3.8.1.</span> <span class="nav-text">上线发布</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Lyon Yang</span>
+
+  
+</div>
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a></div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/iissnan/hexo-theme-next">NexT.Muse</a> v5.1.4</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

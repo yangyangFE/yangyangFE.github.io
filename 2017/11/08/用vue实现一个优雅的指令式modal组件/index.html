@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="前言近期有个vue移动端的项目，用的组件库是mint-ui，但是它的modal会遮盖住整个屏幕，导致用户无法发挥，iOS用户只能选择退出应用，交互很不友好遂着手重新写了一个，并加入团队内部组件库">
+<meta name="description" content="前言vue组件库mint-ui的modal会遮盖住整个屏幕，导致用户无法发挥，iOS用户只能选择退出应用，交互很不友好遂着手重新写了一个，并加入团队内部组件库">
 <meta name="keywords" content="front-end">
 <meta property="og:type" content="article">
 <meta property="og:title" content="用vue实现一个优雅的指令式modal组件">
 <meta property="og:url" content="https://yangyangfe.github.io/2017/11/08/用vue实现一个优雅的指令式modal组件/index.html">
 <meta property="og:site_name" content="Lyon Yang">
-<meta property="og:description" content="前言近期有个vue移动端的项目，用的组件库是mint-ui，但是它的modal会遮盖住整个屏幕，导致用户无法发挥，iOS用户只能选择退出应用，交互很不友好遂着手重新写了一个，并加入团队内部组件库">
+<meta property="og:description" content="前言vue组件库mint-ui的modal会遮盖住整个屏幕，导致用户无法发挥，iOS用户只能选择退出应用，交互很不友好遂着手重新写了一个，并加入团队内部组件库">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-10T06:14:45.928Z">
+<meta property="og:updated_time" content="2018-08-13T06:42:12.175Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="用vue实现一个优雅的指令式modal组件">
-<meta name="twitter:description" content="前言近期有个vue移动端的项目，用的组件库是mint-ui，但是它的modal会遮盖住整个屏幕，导致用户无法发挥，iOS用户只能选择退出应用，交互很不友好遂着手重新写了一个，并加入团队内部组件库">
+<meta name="twitter:description" content="前言vue组件库mint-ui的modal会遮盖住整个屏幕，导致用户无法发挥，iOS用户只能选择退出应用，交互很不友好遂着手重新写了一个，并加入团队内部组件库">
 
 
 
@@ -301,7 +301,7 @@
       
 
       
-        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>近期有个vue移动端的项目，用的组件库是mint-ui，但是它的modal会遮盖住整个屏幕，导致用户无法发挥，iOS用户只能选择退出应用，交互很不友好<br>遂着手重新写了一个，并加入团队内部组件库</p>
+        <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>vue组件库mint-ui的modal会遮盖住整个屏幕，导致用户无法发挥，iOS用户只能选择退出应用，交互很不友好<br>遂着手重新写了一个，并加入团队内部组件库</p>
 <a id="more"></a>
 <hr>
 <h2 id="vue指令式实现"><a href="#vue指令式实现" class="headerlink" title="vue指令式实现"></a>vue指令式实现</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">// index.js</span></span><br><span class="line"><span class="keyword">import</span> Vue <span class="keyword">from</span> <span class="string">'vue'</span></span><br><span class="line"><span class="keyword">const</span> ModalConstructor = Vue.extend(<span class="built_in">require</span>(<span class="string">'./modal.vue'</span>))</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> getModalInstance = <span class="function"><span class="params">()</span> =&gt;</span> &#123;</span><br><span class="line">  <span class="keyword">return</span> <span class="keyword">new</span> ModalConstructor(&#123;</span><br><span class="line">    el: <span class="built_in">document</span>.createElement(<span class="string">'div'</span>)</span><br><span class="line">  &#125;);</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line"><span class="keyword">const</span> show = <span class="function">(<span class="params">options</span>) =&gt;</span>&#123;</span><br><span class="line">  <span class="keyword">let</span> instance = getshowInstance();</span><br><span class="line">  instance.text = <span class="keyword">typeof</span> options === <span class="string">'string'</span> ? options : options.text</span><br><span class="line">  instance.timeout = options.timeout</span><br><span class="line">  instance.iconType = options.iconType</span><br><span class="line">  <span class="built_in">document</span>.body.appendChild(instance.$el);</span><br><span class="line">  <span class="keyword">return</span> instance</span><br><span class="line">&#125;</span><br><span class="line"><span class="built_in">module</span>.exports = &#123;</span><br><span class="line">    show</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
@@ -426,7 +426,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
