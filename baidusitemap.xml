@@ -4,6 +4,23 @@
 
     
   <url>
+    <loc>https://yangyangfe.github.io/2018/06/08/webpack91/</loc>
+    <lastmod>2018-08-13T09:34:34.363Z</lastmod>
+    <data>
+        <display>
+        <title>webpack 91%，报错additional asset processing</title>
+        <pubTime>2018-06-08T13:26:12.000Z</pubTime>
+        
+        <tag>front-end</tag>
+         
+         
+           
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>https://yangyangfe.github.io/2018/08/13/%E5%9F%BA%E4%BA%8Evue-ssr-nuxt-koa2%E5%BC%80%E5%8F%91web%E5%BA%94%E7%94%A8/</loc>
     <lastmod>2018-08-13T09:29:13.545Z</lastmod>
     <data>
@@ -25,23 +42,6 @@
         <display>
         <title>PWA在前端项目中的一次尝试</title>
         <pubTime>2018-06-10T00:30:37.000Z</pubTime>
-        
-        <tag>front-end</tag>
-         
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>https://yangyangfe.github.io/2018/06/08/webpack91%25/</loc>
-    <lastmod>2018-08-13T07:51:25.453Z</lastmod>
-    <data>
-        <display>
-        <title>webpack打包时卡在91%，报错additional asset processing</title>
-        <pubTime>2018-06-08T13:26:12.000Z</pubTime>
         
         <tag>front-end</tag>
          

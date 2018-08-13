@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://yangyangfe.github.io/2018/06/08/webpack91/</loc>
+    
+    <lastmod>2018-08-13T09:34:34.363Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://yangyangfe.github.io/2018/08/13/%E5%9F%BA%E4%BA%8Evue-ssr-nuxt-koa2%E5%BC%80%E5%8F%91web%E5%BA%94%E7%94%A8/</loc>
     
     <lastmod>2018-08-13T09:29:13.545Z</lastmod>
@@ -12,13 +19,6 @@
     <loc>https://yangyangfe.github.io/2018/06/10/PWA%E5%9C%A8%E5%89%8D%E7%AB%AF%E9%A1%B9%E7%9B%AE%E4%B8%AD%E7%9A%84%E4%B8%80%E6%AC%A1%E5%B0%9D%E8%AF%95/</loc>
     
     <lastmod>2018-08-13T07:51:48.131Z</lastmod>
-    
-  </url>
-  
-  <url>
-    <loc>https://yangyangfe.github.io/2018/06/08/webpack91%25/</loc>
-    
-    <lastmod>2018-08-13T07:51:25.453Z</lastmod>
     
   </url>
   
