@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="前言很多nodejs线上项目都用pm2进行部署，它的守护进程，单机器负载均衡功能都非常好用。但是最近在部署一个项目的时候，遇到了一个小问题，那就是pm2和node命令都带有参数的时候，会出现node或者pm2的参数不生效的情况，研究了一下，在此做个记录。  package.json目录下新建一个pm2.json文件配置如下：1234567891011121314&amp;#123;    &quot;apps&quot;:">
+<meta name="description" content="前言很多nodejs线上项目都用pm2进行部署，它的守护进程，单机器负载均衡功能都非常好用。但是最近在部署一个项目的时候，遇到了一个小问题，那就是pm2和node命令都带有参数的时候，会出现node或者pm2的参数不生效的情况，研究了一下，在此做个记录。  根目录下新建一个pm2.json文件配置如下：1234567891011121314&amp;#123;    &quot;apps&quot;: [        &amp;#">
 <meta name="keywords" content="nodejs">
 <meta property="og:type" content="article">
 <meta property="og:title" content="使用pm2启动带命令行参数的nodejs服务">
 <meta property="og:url" content="https://yangyangfe.github.io/2018/08/09/使用pm2启动带命令行参数的nodejs服务/index.html">
 <meta property="og:site_name" content="Lyon Yang">
-<meta property="og:description" content="前言很多nodejs线上项目都用pm2进行部署，它的守护进程，单机器负载均衡功能都非常好用。但是最近在部署一个项目的时候，遇到了一个小问题，那就是pm2和node命令都带有参数的时候，会出现node或者pm2的参数不生效的情况，研究了一下，在此做个记录。  package.json目录下新建一个pm2.json文件配置如下：1234567891011121314&amp;#123;    &quot;apps&quot;:">
+<meta property="og:description" content="前言很多nodejs线上项目都用pm2进行部署，它的守护进程，单机器负载均衡功能都非常好用。但是最近在部署一个项目的时候，遇到了一个小问题，那就是pm2和node命令都带有参数的时候，会出现node或者pm2的参数不生效的情况，研究了一下，在此做个记录。  根目录下新建一个pm2.json文件配置如下：1234567891011121314&amp;#123;    &quot;apps&quot;: [        &amp;#">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-10T06:51:57.894Z">
+<meta property="og:updated_time" content="2018-08-15T03:35:34.122Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="使用pm2启动带命令行参数的nodejs服务">
-<meta name="twitter:description" content="前言很多nodejs线上项目都用pm2进行部署，它的守护进程，单机器负载均衡功能都非常好用。但是最近在部署一个项目的时候，遇到了一个小问题，那就是pm2和node命令都带有参数的时候，会出现node或者pm2的参数不生效的情况，研究了一下，在此做个记录。  package.json目录下新建一个pm2.json文件配置如下：1234567891011121314&amp;#123;    &quot;apps&quot;:">
+<meta name="twitter:description" content="前言很多nodejs线上项目都用pm2进行部署，它的守护进程，单机器负载均衡功能都非常好用。但是最近在部署一个项目的时候，遇到了一个小问题，那就是pm2和node命令都带有参数的时候，会出现node或者pm2的参数不生效的情况，研究了一下，在此做个记录。  根目录下新建一个pm2.json文件配置如下：1234567891011121314&amp;#123;    &quot;apps&quot;: [        &amp;#">
 
 
 
@@ -303,7 +303,7 @@
       
         <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>很多nodejs线上项目都用<a href="http://pm2.keymetrics.io/" target="_blank" rel="noopener">pm2</a>进行部署，它的守护进程，单机器负载均衡功能都非常好用。<br>但是最近在部署一个项目的时候，遇到了一个小问题，那就是pm2和node命令都带有参数的时候，会出现node或者pm2的参数不生效的情况，研究了一下，在此做个记录。</p>
 <hr>
-<h2 id="package-json目录下新建一个pm2-json文件"><a href="#package-json目录下新建一个pm2-json文件" class="headerlink" title="package.json目录下新建一个pm2.json文件"></a>package.json目录下新建一个pm2.json文件</h2><p>配置如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"apps"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"name"</span>: <span class="string">"ymOffer-server"</span>,  <span class="comment">// 名称</span></span><br><span class="line">            <span class="string">"script"</span>: <span class="string">"build/main.js"</span>, <span class="comment">// 要执行的脚本文件</span></span><br><span class="line">            <span class="string">"env"</span>: &#123;</span><br><span class="line">                <span class="string">"NODE_ENV"</span>: <span class="string">"production"</span> <span class="comment">// node参数</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"instances"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">"exec_mode"</span>: <span class="string">"cluster"</span>, <span class="comment">// 负载均衡</span></span><br><span class="line">            <span class="string">"autorestart"</span>: <span class="literal">true</span>   <span class="comment">// 自动重启</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="根目录下新建一个pm2-json文件"><a href="#根目录下新建一个pm2-json文件" class="headerlink" title="根目录下新建一个pm2.json文件"></a>根目录下新建一个pm2.json文件</h2><p>配置如下：<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">    <span class="string">"apps"</span>: [</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="string">"name"</span>: <span class="string">"ymOffer-server"</span>,  <span class="comment">// 名称</span></span><br><span class="line">            <span class="string">"script"</span>: <span class="string">"build/main.js"</span>, <span class="comment">// 要执行的脚本文件</span></span><br><span class="line">            <span class="string">"env"</span>: &#123;</span><br><span class="line">                <span class="string">"NODE_ENV"</span>: <span class="string">"production"</span> <span class="comment">// node参数</span></span><br><span class="line">            &#125;,</span><br><span class="line">            <span class="string">"instances"</span>: <span class="number">0</span>,</span><br><span class="line">            <span class="string">"exec_mode"</span>: <span class="string">"cluster"</span>, <span class="comment">// 负载均衡</span></span><br><span class="line">            <span class="string">"autorestart"</span>: <span class="literal">true</span>   <span class="comment">// 自动重启</span></span><br><span class="line">        &#125;</span><br><span class="line">    ]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>用以下命令启动服务即可即可:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">pm2 start pm2.json</span><br></pre></td></tr></table></figure></p>
 
       
@@ -470,7 +470,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#package-json目录下新建一个pm2-json文件"><span class="nav-number">1.1.</span> <span class="nav-text">package.json目录下新建一个pm2.json文件</span></a></li></ol></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#根目录下新建一个pm2-json文件"><span class="nav-number">1.1.</span> <span class="nav-text">根目录下新建一个pm2.json文件</span></a></li></ol></li></ol></div>
             
 
           </div>

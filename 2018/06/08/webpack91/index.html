@@ -80,18 +80,18 @@
 
 
 
-<meta name="description" content="背景 aws免费ec2实例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。 具体表现为，打包进度到达91%时就卡住了，等了近10分钟，也不见好转。 考虑在个人机器上没有遇到此问题，低配置机器上出现，可能是配置问题。  解决方式12345678Make all swap offsudo swapoff -aResize the swapfilesudo dd if=/dev/zero">
+<meta name="description" content="背景 aws免费ec2实例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。 具体表现为，打包进度到达91%时就卡住了，等了近10分钟，也不见好转。 考虑在个人机器上没有遇到此问题，低配机器上出现，可能是配置问题。  解决方式12345678Make all swap offsudo swapoff -aResize the swapfilesudo dd if=/dev/zero">
 <meta name="keywords" content="front-end">
 <meta property="og:type" content="article">
 <meta property="og:title" content="webpack 91%，报错additional asset processing">
 <meta property="og:url" content="https://yangyangfe.github.io/2018/06/08/webpack91/index.html">
 <meta property="og:site_name" content="Lyon Yang">
-<meta property="og:description" content="背景 aws免费ec2实例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。 具体表现为，打包进度到达91%时就卡住了，等了近10分钟，也不见好转。 考虑在个人机器上没有遇到此问题，低配置机器上出现，可能是配置问题。  解决方式12345678Make all swap offsudo swapoff -aResize the swapfilesudo dd if=/dev/zero">
+<meta property="og:description" content="背景 aws免费ec2实例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。 具体表现为，打包进度到达91%时就卡住了，等了近10分钟，也不见好转。 考虑在个人机器上没有遇到此问题，低配机器上出现，可能是配置问题。  解决方式12345678Make all swap offsudo swapoff -aResize the swapfilesudo dd if=/dev/zero">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-13T09:34:34.363Z">
+<meta property="og:updated_time" content="2018-08-15T03:36:33.727Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="webpack 91%，报错additional asset processing">
-<meta name="twitter:description" content="背景 aws免费ec2实例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。 具体表现为，打包进度到达91%时就卡住了，等了近10分钟，也不见好转。 考虑在个人机器上没有遇到此问题，低配置机器上出现，可能是配置问题。  解决方式12345678Make all swap offsudo swapoff -aResize the swapfilesudo dd if=/dev/zero">
+<meta name="twitter:description" content="背景 aws免费ec2实例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。 具体表现为，打包进度到达91%时就卡住了，等了近10分钟，也不见好转。 考虑在个人机器上没有遇到此问题，低配机器上出现，可能是配置问题。  解决方式12345678Make all swap offsudo swapoff -aResize the swapfilesudo dd if=/dev/zero">
 
 
 
@@ -304,7 +304,7 @@
         <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><hr>
 <p>aws免费ec2实例，只提供1G内存，因此遇到了一次webpack打包被卡住的情况。</p>
 <p>具体表现为，打包进度到达91%时就卡住了，等了近10分钟，也不见好转。</p>
-<p>考虑在个人机器上没有遇到此问题，低配置机器上出现，可能是配置问题。</p>
+<p>考虑在个人机器上没有遇到此问题，低配机器上出现，可能是配置问题。</p>
 <hr>
 <h1 id="解决方式"><a href="#解决方式" class="headerlink" title="解决方式"></a>解决方式</h1><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">Make all swap off</span><br><span class="line">sudo swapoff -a</span><br><span class="line">Resize the swapfile</span><br><span class="line">sudo dd <span class="keyword">if</span>=/dev/zero of=/swapfile bs=1M count=1024</span><br><span class="line">Make swapfile usable</span><br><span class="line">sudo mkswap /swapfile</span><br><span class="line">Make swapon again</span><br><span class="line">sudo swapon /swapfile</span><br></pre></td></tr></table></figure>
 <h1 id="关于swap文件"><a href="#关于swap文件" class="headerlink" title="关于swap文件"></a>关于swap文件</h1><p>当系统的物理内存不够用的时候，就需要将物理内存中的一部分空间释放出来，以供当前运行的程序使用。那些被释放的空间可能来自一些很长时间没有什么操作的程序，这些被释放的空间被临时保存到Swap空间中，等到那些程序要运行时，再从Swap中恢复保存的数据到内存中。这样，系统总是在物理内存不够时，才进行Swap交换。</p>
