@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="Lyon Yang">
 <meta property="og:description" content="前言Serverless不是无服务，指的是由开发者实现的服务端逻辑运行在无状态的计算容器中，它由事件触发， 完全被第三方管理，其业务层面的状态则被开发者使用的数据库和存储资源所记录。具体可以参考aws的这篇文章 开始试想一下，我们需要提供一个转换缩略图的公共服务，除了关注业务代码本身，还要处理部署到服务器，并发，监控，扩容等等，是不是有点太费周折呢。 我们尝试使用将aws lambda搞定。 首先">
 <meta property="og:locale" content="default">
-<meta property="og:updated_time" content="2018-08-15T10:08:44.185Z">
+<meta property="og:updated_time" content="2018-12-19T03:11:03.689Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="尝试serverless架构--以aws lambda为例">
 <meta name="twitter:description" content="前言Serverless不是无服务，指的是由开发者实现的服务端逻辑运行在无状态的计算容器中，它由事件触发， 完全被第三方管理，其业务层面的状态则被开发者使用的数据库和存储资源所记录。具体可以参考aws的这篇文章 开始试想一下，我们需要提供一个转换缩略图的公共服务，除了关注业务代码本身，还要处理部署到服务器，并发，监控，扩容等等，是不是有点太费周折呢。 我们尝试使用将aws lambda搞定。 首先">
@@ -304,7 +304,7 @@
 <h1 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h1><p>试想一下，我们需要提供一个转换缩略图的公共服务，除了关注业务代码本身，还要处理部署到服务器，并发，监控，扩容等等，是不是有点太费周折呢。</p>
 <p>我们尝试使用将aws lambda搞定。</p>
 <h4 id="首先，需要注册一个aws账号"><a href="#首先，需要注册一个aws账号" class="headerlink" title="首先，需要注册一个aws账号"></a>首先，需要注册一个aws账号</h4><p>登录<a href="https://aws.amazon.com" target="_blank" rel="noopener">aws官网</a>，创建一个免费账户。</p>
-<h3 id="创建一个lambda函数"><a href="#创建一个lambda函数" class="headerlink" title="创建一个lambda函数"></a>创建一个<a href="https://docs.aws.amazon.com/zh_cn/lambda/latest/dg/lambda-app.html" target="_blank" rel="noopener">lambda函数</a></h3><p>lambda支持目前支持以下runtime<br>C#,go1.x, java 8, node.js4.3/6.10/8.10, python2.7/3.6</p>
+<h3 id="创建一个lambda函数"><a href="#创建一个lambda函数" class="headerlink" title="创建一个lambda函数"></a>创建一个<a href="https://docs.aws.amazon.com/zh_cn/lambda/latest/dg/lambda-app.html" target="_blank" rel="noopener">lambda函数</a></h3><p>lambda目前支持支持以下runtime<br>C#,go1.x, java 8, node.js4.3/6.10/8.10, python2.7/3.6</p>
 <h3 id="编写"><a href="#编写" class="headerlink" title="编写"></a>编写</h3><p>我们以node.js8.10为例<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">exports.index = <span class="function"><span class="keyword">function</span>(<span class="params">event, context, callback</span>) </span>&#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <ul>
 <li>event是请求传递参数</li>
@@ -318,13 +318,15 @@
 <h3 id="S3"><a href="#S3" class="headerlink" title="S3"></a>S3</h3><p>我们可以配置S3的create put 等事件，以一个缩略图服务为例，我们配置s3指定bucket的create事件来触发lambda，我们上传图片到s3，自动触发lambda，在lambda中，我们获取到图片，压缩后，存到另一个s3 bucket。</p>
 <h3 id="SDK"><a href="#SDK" class="headerlink" title="SDK"></a>SDK</h3><p>我们的代码可以通过aws sdk触发lambda，<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> aws = <span class="built_in">require</span>(<span class="string">'aws-sdk'</span>)</span><br><span class="line"><span class="keyword">const</span> lambda = <span class="keyword">new</span> aws.Lambda()</span><br><span class="line"></span><br><span class="line">lambda.invoke(&#123; </span><br><span class="line">   FunctionName: <span class="string">'arn'</span>, <span class="comment">// 你的lambda函数的arn </span></span><br><span class="line">   InvocationType: <span class="string">'Event'</span>, <span class="comment">// 如果要异步调用，加上这句代码</span></span><br><span class="line">   Payload: <span class="built_in">JSON</span>.stringify(event.body, <span class="literal">null</span>, <span class="number">2</span>) <span class="comment">// pass params </span></span><br><span class="line">  &#125;, <span class="function"><span class="keyword">function</span> (<span class="params">error, data</span>) </span>&#123; </span><br><span class="line">   <span class="keyword">if</span> (error) &#123; </span><br><span class="line">    callback(<span class="literal">null</span>, &#123; <span class="string">"statusCode"</span> : <span class="number">400</span>, <span class="string">"body"</span> : <span class="built_in">JSON</span>.stringify(error)&#125;);</span><br><span class="line">   &#125; </span><br><span class="line">   <span class="keyword">else</span> &#123; </span><br><span class="line">    callback(<span class="literal">null</span>, &#123; <span class="string">"statusCode"</span> : <span class="number">200</span>, <span class="string">"body"</span> : <span class="built_in">JSON</span>.stringify(data)&#125;);</span><br><span class="line">   &#125; </span><br><span class="line">  &#125;);</span><br></pre></td></tr></table></figure></p>
 <p>除此之外，还可以通过配置，使用Kinesis, SNS, SQS, CodeCommit, CloundWatch Logs/Events 等方式触发lambda</p>
+<p>这里有点权限问题，如果本地调用，可以使用用户的ak sk，上线后，给予对应机器invoke lambda的权限即可，切记线上环境不能使用用户ak sk，防止不必要的风险。</p>
 <h1 id="异步调用"><a href="#异步调用" class="headerlink" title="异步调用"></a>异步调用</h1><p>在处理lambda异步调用时，遇到了一点坑，在这里记录一下</p>
 <h3 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h3><p>以node.js为例，我在函数的第一行调用callback, 期待先返回结果，达到异步效果。<br>然而实际上callback是在event loop结束后，才调用的，而不是由代码执行顺序决定的。<br>也就是说，我期待的异步调用，最终依然是同步调用，于是我添加了以下代码<br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">context.callbackWaitsForEmptyEventLoop = <span class="literal">false</span> <span class="comment">// 立即执行callback，而无需等待事件循环结束</span></span><br></pre></td></tr></table></figure></p>
 <p>结果就是函数确实立马返回了，但是也不会继续往下执行了。</p>
 <p>反思了一下，应该是lambda不期望我们一直占用资源，所有它应该会在callback里返回请求，并释放资源。</p>
 <h3 id="解决办法"><a href="#解决办法" class="headerlink" title="解决办法"></a>解决办法</h3><p>查了一些资料，也自己实验了一下，lambda是否异步调用取决于调用方，而不是lambda本身，如api gateway就是同步调用的，s3就是异步调用的。<br>所幸，lambda的sdk提供了异步调用lambda的方法，具体可参考上文SDK调用一节。 </p>
-<h1 id="lambda和ec2通信"><a href="#lambda和ec2通信" class="headerlink" title="lambda和ec2通信"></a>lambda和ec2通信</h1><p>一开始我也认为使用ec2公网ip应该是可以的，然而并不可以<br>aws规定，必须保证二者在同一个vpc下，lambda使用ec2的内网ip即可<br>原因是lambda不是一个服务器，在调用时分配资源，故而没有固定ip</p>
-<h1 id="配置-收费"><a href="#配置-收费" class="headerlink" title="配置/收费"></a>配置/收费</h1><p>lambda是按请求数收费的，每月前100万次请求是免费的，可以放心使用<br>为我们预留了1000并发，支持自动扩容，因此，并发数我们也不用考虑<br>当然，收费也是和lambda配置相关的，运行内存可以选择128MB-3008MB</p>
+<h1 id="lambda和ec2通信"><a href="#lambda和ec2通信" class="headerlink" title="lambda和ec2通信"></a>lambda和ec2通信</h1><p>一开始我也认为使用ec2公网ip应该是可以的，然而并不可以<br>aws规定，必须保证二者在同一个vpc下，lambda使用ec2的内网ip即可<br>原因是lambda不是一个服务器，在调用时分配资源，故而没有固定ip，无法加入ec2白名单。</p>
+<h1 id="配置-收费"><a href="#配置-收费" class="headerlink" title="配置/收费"></a>配置/收费</h1><p>lambda为我们预留了1000并发，支持自动扩容</p>
+<p>lambda是按请求数收费的，每月前100万次请求是免费的，可以放心使用<br>收费也是和lambda配置相关的，运行内存可以选择128MB-3008MB</p>
 
       
     </div>
@@ -358,6 +360,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/12/25/维权/" rel="prev" title="">
+                 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -434,7 +440,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">7</span>
+                  <span class="site-state-item-count">9</span>
                   <span class="site-state-item-name">posts</span>
                 </a>
               </div>
@@ -500,7 +506,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
